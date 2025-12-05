@@ -213,7 +213,7 @@ const Home = () => {
             <div className="md:col-span-1">
               <div className="text-2xl font-bold text-gold mb-4">MONTERNA AGENCY</div>
               <p className="text-muted-foreground text-sm mb-4">
-                L'excellence en mannequinat depuis 2008. Nous révélons les talents d'exception.
+                L'excellence en mannequinat depuis 2025. Nous révélons les talents d'exception.
               </p>
               <div className="flex space-x-4">
                 <a href="https://twitter.com/monternaagency" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-gold transition-colors">
@@ -263,9 +263,9 @@ const Home = () => {
             <div>
               <h4 className="text-foreground font-semibold mb-4">Contact</h4>
               <ul className="space-y-2 text-sm">
-                <li className="text-muted-foreground">123 Avenue des Champs</li>
-                <li className="text-muted-foreground">75008 Paris, France</li>
-                <li className="text-muted-foreground">+33 1 42 00 00 00</li>
+                <li className="text-muted-foreground">Avenue baraquilla </li>
+                <li className="text-muted-foreground">jacmel, Haiti</li>
+                <li className="text-muted-foreground">+509 34 53 54 84</li>
                 <li className="text-muted-foreground">contact@monternaagency.com</li>
                 <li><Link to="/admin" className="text-muted-foreground hover:text-gold transition-colors">Administration</Link></li>
               </ul>

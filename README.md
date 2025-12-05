@@ -6,6 +6,11 @@
 
 There are several ways of editing your application.
 
+<<<<<<< HEAD
+=======
+**Use Lovable**
+
+>>>>>>> 0f83f3a254e1ac816556c270b0d9669452359bf6
 
 Changes made via Lovable will be committed automatically to this repo.
 
