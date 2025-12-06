@@ -658,10 +658,6 @@ const Application = () => {
                     </Label>
                   </div>
 
-                  <div className="bg-gold/10 border border-gold/20 rounded-lg p-4">
-                  
-                  </div>
-
                   <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
                     <Star className="w-4 h-4 mr-2" />
                     {isSubmitting ? 'Envoi en cours...' : 'Soumettre ma Candidature'}
