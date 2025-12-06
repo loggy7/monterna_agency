@@ -12,6 +12,12 @@ import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { FileUpload } from '@/components/FileUpload';
 import { z } from 'zod';
+import emailjs from '@emailjs/browser';
+
+// Configuration EmailJS - Remplacez par vos propres identifiants
+const EMAILJS_SERVICE_ID = 'service_rw7vi1c';
+const EMAILJS_TEMPLATE_ID = 'template_z6ewq4a';
+const EMAILJS_PUBLIC_KEY = '05vaR3_kVJryPds25';
 
 const Application = () => {
   const [formData, setFormData] = useState({
@@ -78,46 +84,111 @@ const Application = () => {
       return;
     }
 
-    // Validate form data
+    setIsSubmitting(true);
+
     try {
-      const validatedData = {
-        ...formData,
-        age: parseInt(formData.age),
-        height: parseInt(formData.height),
-        weight: formData.weight ? parseInt(formData.weight) : undefined,
+      // Préparer les intérêts sous forme de texte
+      const interestsText = [
+        formData.interests.runway && 'Défilé de mode',
+        formData.interests.photoshoot && 'Shooting photo',
+        formData.interests.advertising && 'Publicité',
+        formData.interests.videoClip && 'Clip vidéo',
+        formData.interests.other && `Autres: ${formData.otherInterests}`
+      ].filter(Boolean).join(', ') || 'Aucun';
+
+      // Paramètres du template EmailJS
+      const templateParams = {
+        from_name: `${formData.firstName} ${formData.lastName}`,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        nickname: formData.nickname || 'Non renseigné',
+        birthDate: formData.birthDate,
+        age: formData.age,
+        city: formData.city,
+        phone: formData.phone,
+        email: formData.email,
+        education: formData.education || 'Non renseigné',
+        category: formData.category,
+        height: formData.height,
+        weight: formData.weight || 'Non renseigné',
+        eyeColor: formData.eyeColor || 'Non renseigné',
+        hairColor: formData.hairColor || 'Non renseigné',
+        skinColor: formData.skinColor || 'Non renseigné',
+        clothingSize: formData.clothingSize || 'Non renseigné',
+        shoeSize: formData.shoeSize || 'Non renseigné',
+        bust: formData.bust || 'Non renseigné',
+        waist: formData.waist || 'Non renseigné',
+        hips: formData.hips || 'Non renseigné',
+        experience: formData.experience || 'Aucune',
+        skills: formData.skills || 'Non renseigné',
+        description: formData.description,
+        availability: formData.availability || 'Non renseigné',
+        canTravel: formData.canTravel ? 'Oui' : 'Non',
+        interests: interestsText,
+        headshotName: headshotFile.name,
+        fullBodyName: fullBodyFile.name,
       };
 
-      setIsSubmitting(true);
-
-      // TODO: When backend is connected, this will:
-      // 1. Upload photos to Supabase Storage
-      // 2. Save form data to Supabase database
-      // 3. Send email notification to admin
+      // Envoyer l'email via EmailJS
+      await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        templateParams,
+        EMAILJS_PUBLIC_KEY
+      );
 
       toast({
-        title: "Backend requis",
-        description: "Activez Lovable Cloud pour envoyer les candidatures par email",
-        variant: "destructive",
+        title: "Candidature envoyée !",
+        description: "Votre candidature a été envoyée avec succès. Nous vous contacterons bientôt.",
       });
 
-      console.log('Application Data:', validatedData);
-      console.log('Headshot:', headshotFile);
-      console.log('Full Body:', fullBodyFile);
+      // Réinitialiser le formulaire
+      setFormData({
+        firstName: '',
+        lastName: '',
+        nickname: '',
+        birthDate: '',
+        email: '',
+        phone: '',
+        age: '',
+        city: '',
+        education: '',
+        height: '',
+        weight: '',
+        eyeColor: '',
+        hairColor: '',
+        skinColor: '',
+        clothingSize: '',
+        shoeSize: '',
+        bust: '',
+        waist: '',
+        hips: '',
+        experience: '',
+        skills: '',
+        category: '',
+        description: '',
+        availability: '',
+        canTravel: false,
+        interests: {
+          runway: false,
+          photoshoot: false,
+          advertising: false,
+          videoClip: false,
+          other: false
+        },
+        otherInterests: '',
+        acceptTerms: false
+      });
+      setHeadshotFile(null);
+      setFullBodyFile(null);
 
     } catch (error) {
-      if (error instanceof z.ZodError) {
-        toast({
-          title: "Erreur de validation",
-          description: error.errors[0].message,
-          variant: "destructive",
-        });
-      } else {
-        toast({
-          title: "Erreur",
-          description: "Une erreur est survenue lors de la soumission",
-          variant: "destructive",
-        });
-      }
+      console.error('EmailJS Error:', error);
+      toast({
+        title: "Erreur d'envoi",
+        description: "Une erreur est survenue lors de l'envoi. Veuillez réessayer.",
+        variant: "destructive",
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -587,11 +658,8 @@ const Application = () => {
                     </Label>
                   </div>
 
-                  <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-4">
-                    <p className="text-destructive text-sm">
-                      <strong>Backend requis :</strong> Pour soumettre votre candidature et recevoir une confirmation par email, 
-                      activez Lovable Cloud.
-                    </p>
+                  <div className="bg-gold/10 border border-gold/20 rounded-lg p-4">
+                  
                   </div>
 
                   <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
